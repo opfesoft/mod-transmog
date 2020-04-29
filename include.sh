@@ -2,8 +2,10 @@
 
 TRANSM_PATH_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
 
-source $TRANSM_PATH_ROOT"/conf/conf.sh.dist"
+DB_CHARACTERS_CUSTOM_PATHS+=(
+        $TRANSM_PATH_ROOT"/data/sql/db-characters/"
+)
 
-if [ -f $TRANSM_PATH_ROOT"/conf/conf.sh" ]; then
-    source $TRANSM_PATH_ROOT"/conf/conf.sh"
-fi
+DB_WORLD_CUSTOM_PATHS+=(
+        $TRANSM_PATH_ROOT"/data/sql/db-world/"
+)
