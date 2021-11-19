@@ -14,11 +14,14 @@ void Transmogrification::PresetTransmog(Player* player, Item* itemTransmogrified
     if (!CanTransmogrifyItemWithItem(player, itemTransmogrified->GetTemplate(), sObjectMgr->GetItemTemplate(fakeEntry)))
         return;
 
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+
     // [AZTH] Custom
     if (GetFakeEntry(itemTransmogrified->GetGUID()))
-        DeleteFakeEntry(player, slot, itemTransmogrified);
+        DeleteFakeEntry(player, slot, itemTransmogrified, &trans);
 
-    SetFakeEntry(player, fakeEntry, slot, itemTransmogrified); // newEntry
+    SetFakeEntry(player, fakeEntry, slot, itemTransmogrified, &trans); // newEntry
+    CharacterDatabase.CommitTransaction(trans);
 
 
     itemTransmogrified->UpdatePlayedTime(player);
@@ -280,12 +283,15 @@ void Transmogrification::DeleteFakeEntry(Player* player, uint8 /*slot*/, Item* i
     UpdateItem(player, itemTransmogrified);
 }
 
-void Transmogrification::SetFakeEntry(Player* player, uint32 newEntry, uint8 /*slot*/, Item* itemTransmogrified)
+void Transmogrification::SetFakeEntry(Player* player, uint32 newEntry, uint8 /*slot*/, Item* itemTransmogrified, SQLTransaction* trans)
 {
     uint64 itemGUID = itemTransmogrified->GetGUID();
     entryMap[player->GetGUID()][itemGUID] = newEntry;
     dataMap[itemGUID] = player->GetGUID();
-    CharacterDatabase.PExecute("REPLACE INTO custom_transmogrification (GUID, FakeEntry, Owner) VALUES (%u, %u, %u)", GUID_LOPART(itemGUID), newEntry, player->GetGUIDLow());
+    if (trans)
+        (*trans)->PAppend("REPLACE INTO custom_transmogrification (GUID, FakeEntry, Owner) VALUES (%u, %u, %u)", GUID_LOPART(itemGUID), newEntry, player->GetGUIDLow());
+    else
+        CharacterDatabase.PExecute("REPLACE INTO custom_transmogrification (GUID, FakeEntry, Owner) VALUES (%u, %u, %u)", GUID_LOPART(itemGUID), newEntry, player->GetGUIDLow());
     UpdateItem(player, itemTransmogrified);
 }
 
