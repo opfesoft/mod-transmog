@@ -1,4 +1,9 @@
 /*
+ * Copyright (C) 2020+     Project "Sol" <https://gitlab.com/opfesoft/sol>, released under the GNU AGPLv3 license: https://gitlab.com/opfesoft/mod-transmog/-/blob/master/LICENSE.md
+ * Copyright (C) 2016-2020 AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/mod-transmog/blob/master/LICENSE
+*/
+
+/*
 5.0
 Transmogrification 3.3.5a - Gossip menu
 By Rochet2
