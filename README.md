@@ -1,4 +1,4 @@
-# Transmog Module
+# Transmog Module<br>(Discontinued as of 2024-07-29)
 
 This module adds a transmog feature, it's based on [Rochet2 Transmog Script](http://rochet2.github.io/Transmogrification.html)
 
